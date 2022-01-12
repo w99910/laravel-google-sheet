@@ -50,7 +50,7 @@ class GoogleSheetService
         return $response->getValues();
     }
 
-    public function getSheet(string $sheetId):\Google\Service\Sheets\Spreadsheet
+    public function getSheetDetails(string $sheetId):\Google\Service\Sheets\Spreadsheet
     {
         $service = $this->service;
         return $service->spreadsheets->get($sheetId);
