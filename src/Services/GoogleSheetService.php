@@ -1,5 +1,10 @@
 <?php
 
+namespace Zlt\LaravelGoogleSheet\Services;
+
+use Google_Service_Sheets;
+use Google_Service_Sheets_ValueRange;
+
 class GoogleSheetService
 {
     private \Google\Service\Sheets $service;
