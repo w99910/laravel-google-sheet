@@ -1,5 +1,5 @@
 {
-    "name": "zawlintun/laravel-google-sheet",
+    "name": "zlt/laravel-google-sheet",
     "description": "Google Sheet Service For Laravel",
     "type": "library",
     "license": "MIT",
