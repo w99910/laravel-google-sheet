@@ -37,6 +37,24 @@ Insert the required credentials inside `config/filesystems.php` as follow.
     dd($service->get('sheetId','A:G'))  
    ```
 
+- **getValuesBySheetName($sheetId,$sheetName,$range='')**
+ ```php
+ $service = new Zlt\LaravelGoogleSheet\Services\GoogleSheetService();
+ dd($service->getValuesBySheetName('sheetId','sheetName'));
+ ```
+
+
 - **getSheetDetails($sheetId)**
     
     Get details of sheet id.
+```php
+$service = new Zlt\LaravelGoogleSheet\Services\GoogleSheetService();
+dd($service->getSheetDetails('sheetId'));
+```
+
+- **insertValues($sheetId, $range, array $values, $valueInputOption = "RAW")**
+   Append new rows to sheet. 
+```php
+$service = new Zlt\LaravelGoogleSheet\Services\GoogleSheetService();
+dd($service->insertValues('sheetId','A:D',[[1,2,3,4],[a,b,c,d]]));
+```

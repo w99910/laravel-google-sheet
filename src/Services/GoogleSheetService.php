@@ -24,8 +24,8 @@ class GoogleSheetService
         $this->service = new Google_Service_Sheets($client);
     }
 
-    public function insertValues($spreadsheetId, $range,
-                                 array $values,$valueInputOption = "RAW"): \Google\Service\Sheets\AppendValuesResponse
+    public function insertValues($sheetId, $range,
+                                 array $values, $valueInputOption = "RAW"): \Google\Service\Sheets\AppendValuesResponse
     {
         $service = $this->service;
         if(empty($values))throw \Exception('Empty Values');
@@ -35,7 +35,7 @@ class GoogleSheetService
         $params = [
             'valueInputOption' => $valueInputOption,
         ];
-        return $service->spreadsheets_values->append($spreadsheetId, $range, $body, $params);
+        return $service->spreadsheets_values->append($sheetId, $range, $body, $params);
     }
 
     public function getValuesBySheetName($sheetId,$sheetName,$range=''):array
