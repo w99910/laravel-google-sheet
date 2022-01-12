@@ -1,0 +1,22 @@
+{
+    "name": "zawlintun/laravel-google-sheet",
+    "description": "Google Sheet Service For Laravel",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Zawlintun\\LaravelGoogleSheet\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Zaw Lin Tun",
+            "email": "zlintun001@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "google/apiclient": "^2.11",
+        "php": "^7.4|^8.0"
+    }
+}
