@@ -2,34 +2,39 @@
 
 namespace Zlt\LaravelGoogleSheet\Services;
 
-use Google_Service_Sheets;
-use Google_Service_Sheets_ValueRange;
+use Google\Service\Sheets;
+use Google\Service\Sheets\ValueRange;
 
 class GoogleSheetService
 {
-    private \Google\Service\Sheets $service;
+    private Sheets $service;
 
-    public function __construct(){
+    public function __construct()
+    {
         $this->init();
     }
 
-    private function init(){
+    private function init()
+    {
         $client = new \Google\Client();
         $config = config('filesystems.disks.google');
-        $client->setScopes(Google_Service_Sheets::SPREADSHEETS);
+        $client->setScopes(Sheets::SPREADSHEETS);
         $client->setClientId($config['clientId']);
         $client->setClientSecret($config['clientSecret']);
         $client->refreshToken($config['refreshToken']);
         $client->setAccessType('online');
-        $this->service = new Google_Service_Sheets($client);
+        $this->service = new Sheets($client);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function insertValues($sheetId, $range,
                                  array $values, $valueInputOption = "RAW"): \Google\Service\Sheets\AppendValuesResponse
     {
         $service = $this->service;
-        if(empty($values))throw \Exception('Empty Values');
-        $body = new Google_Service_Sheets_ValueRange([
+        if (empty($values)) throw new \Exception('Empty Values');
+        $body = new ValueRange([
             'values' => $values
         ]);
         $params = [
@@ -38,19 +43,19 @@ class GoogleSheetService
         return $service->spreadsheets_values->append($sheetId, $range, $body, $params);
     }
 
-    public function getValuesBySheetName($sheetId,$sheetName,$range=''):array
+    public function getValuesBySheetName($sheetId, $sheetName, $range = ''): array
     {
         $service = $this->service;
-        if(!$range){
+        if (!$range) {
             $range = $sheetName;
-        }else{
-            $range = $sheetName.'!'.$range;
+        } else {
+            $range = $sheetName . '!' . $range;
         }
-        $response = $service->spreadsheets_values->get($sheetId,$range);
+        $response = $service->spreadsheets_values->get($sheetId, $range);
         return $response->getValues();
     }
 
-    public function getSheetDetails(string $sheetId):\Google\Service\Sheets\Spreadsheet
+    public function getSheetDetails(string $sheetId): \Google\Service\Sheets\Spreadsheet
     {
         $service = $this->service;
         return $service->spreadsheets->get($sheetId);
@@ -59,15 +64,15 @@ class GoogleSheetService
     /**
      * @throws \Exception
      */
-    public function get($sheetId, $range=''): array
+    public function get($sheetId, $range = ''): array
     {
         $service = $this->service;
         $response = $service->spreadsheets->get($sheetId);
         $sheets = $response->getSheets();
-        if(count($sheets)>0){
+        if (count($sheets) > 0) {
             $temp = [];
-            foreach($sheets as $sheet){
-                $temp[]=$this->getValuesBySheetName($sheetId,$sheet->properties->title);
+            foreach ($sheets as $sheet) {
+                $temp[] = $this->getValuesBySheetName($sheetId, $sheet->properties->title);
             }
             return array_merge(...$temp);
         }
