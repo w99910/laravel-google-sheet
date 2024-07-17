@@ -7,7 +7,7 @@ use Google\Service\Sheets\ValueRange;
 
 class GoogleSheetService
 {
-    private Sheets $service;
+    protected Sheets $service;
 
     public function __construct()
     {
