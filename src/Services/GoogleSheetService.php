@@ -7,6 +7,7 @@ use Google\Service\Sheets\BatchUpdateSpreadsheetRequest;
 use Google\Service\Sheets\CellFormat;
 use Google\Service\Sheets\GridRange;
 use Google\Service\Sheets\Request;
+use Google\Service\Sheets\Spreadsheet;
 use Google\Service\Sheets\ValueRange;
 
 class GoogleSheetService
@@ -195,5 +196,30 @@ class GoogleSheetService
             'requests' => $updateRequests
         ]);
         return $this->service->spreadsheets->batchUpdate($sheetId, $batchUpdateRequest);
+    }
+
+    /**
+     * @param  string  $name
+     * @param  array  $data
+     * @return string
+     * @throws \Exception
+     */
+    public function createSheet(string $name, array $data): string
+    {
+        $spreadsheet = new Spreadsheet([
+            'properties' => [
+                'title' => $name,
+            ]
+        ]);
+        $spreadsheet = $this->service->spreadsheets->create($spreadsheet);
+        $spreadsheetId = $spreadsheet->spreadsheetId;
+        $startColumnLetter = 'A';
+        $endColumnLetter = chr(ord($startColumnLetter) + count($data[0]) - 1);
+        $startRow = 1;
+        $endRow = count($data) - 1;
+
+        $range = $startColumnLetter.$startRow.':'.$endColumnLetter.$endRow;
+        $this->insertValues($spreadsheetId, $range, $data);
+        return $spreadsheetId;
     }
 }
